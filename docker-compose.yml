@@ -1,0 +1,17 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - MAX_FILE_MB=4096
+      - CLEANUP_TTL_MS=3600000
+      - FFMPEG_PATH=/usr/bin/ffmpeg
+    volumes:
+      # Persist temp files across container restarts (optional)
+      - splitter_tmp:/tmp/splitter
+    restart: unless-stopped
+
+volumes:
+  splitter_tmp:
