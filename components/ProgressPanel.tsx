@@ -48,7 +48,7 @@ export default function ProgressPanel({
   return (
     <div className="w-full max-w-2xl mx-auto space-y-6">
       {/* Header Status */}
-      <div className="glass-card rounded-2xl p-6">
+      <div className="bg-white border border-neutral-100 shadow-sm rounded-2xl p-6">
         <div className="flex items-center gap-4 mb-5">
           <div
             className={`
@@ -67,10 +67,10 @@ export default function ProgressPanel({
             )}
           </div>
           <div>
-            <p className="text-lg font-semibold text-white">
+            <p className="text-lg font-semibold text-neutral-900">
               {STATUS_LABELS[status ?? "pending"] ?? "Processing…"}
             </p>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-neutral-500">
               {isDone
                 ? `${parts.length} part${parts.length !== 1 ? "s" : ""} ready`
                 : `Total duration: ${formatDuration(totalDurationSec)}`}
@@ -88,7 +88,7 @@ export default function ProgressPanel({
         </div>
 
         {/* Overall Progress Bar */}
-        <div className="h-3 bg-slate-700 rounded-full overflow-hidden">
+        <div className="h-3 bg-neutral-200 rounded-full overflow-hidden">
           <div
             className={`
               h-full rounded-full transition-all duration-500 ease-out
@@ -117,13 +117,13 @@ export default function ProgressPanel({
             <div
               key={i}
               className={`
-                glass-card rounded-xl p-4 transition-all duration-500
+                bg-white border border-neutral-100 shadow-sm rounded-xl p-4 transition-all duration-500
                 ${isReady ? "border border-emerald-500/30 bg-emerald-500/5" : ""}
                 ${isCurrent ? "border border-violet-500/50 bg-violet-500/10 animate-pulse-subtle" : ""}
               `}
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono text-slate-400">
+                <span className="text-xs font-mono text-neutral-500">
                   Part {String(i + 1).padStart(3, "0")}
                 </span>
                 {isReady && (
@@ -141,7 +141,7 @@ export default function ProgressPanel({
                   {part.durationSec ? formatDuration(part.durationSec) : "Ready"}
                 </p>
               ) : (
-                <div className="h-4 bg-slate-700 rounded animate-pulse" />
+                <div className="h-4 bg-neutral-200 rounded animate-pulse" />
               )}
             </div>
           );

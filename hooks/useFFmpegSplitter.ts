@@ -94,7 +94,7 @@ export function useFFmpegSplitter() {
         for (let i = 0; i < outputFiles.length; i++) {
           const outName = outputFiles[i].name as string;
           const data = await ffmpeg.readFile(outName);
-          const blob = new Blob([data], { type: 'video/mp4' });
+          const blob = new Blob([data as unknown as BlobPart], { type: 'video/mp4' });
           const url = URL.createObjectURL(blob);
           
           allParts.push({
