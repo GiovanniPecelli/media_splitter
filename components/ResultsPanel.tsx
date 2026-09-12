@@ -1,25 +1,26 @@
 "use client";
 
-import { JobPart } from "@/lib/types";
+import { useState } from "react";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 import {
   ArrowDownTrayIcon,
   ArchiveBoxArrowDownIcon,
   FilmIcon,
 } from "@heroicons/react/24/outline";
 
-interface ResultsPanelProps {
-  jobId: string;
-  parts: JobPart[];
-  originalName: string;
+interface JobPartClient {
+  index: number;
+  filename: string;
+  blobUrl: string;
+  sizeBytes: number;
+  durationSec?: number;
 }
 
-function formatDuration(sec: number): string {
-  const h = Math.floor(sec / 3600);
-  const m = Math.floor((sec % 3600) / 60);
-  const s = Math.floor(sec % 60);
-  if (h > 0) return `${h}h ${m}m ${s}s`;
-  if (m > 0) return `${m}m ${s}s`;
-  return `${s}s`;
+interface ResultsPanelProps {
+  jobId: string;
+  parts: JobPartClient[];
+  originalName: string;
 }
 
 function formatBytes(bytes: number): string {
@@ -29,21 +30,34 @@ function formatBytes(bytes: number): string {
   return `${(bytes / 1024 / 1024 / 1024).toFixed(2)} GB`;
 }
 
-function formatTimecode(sec: number): string {
-  const h = Math.floor(sec / 3600);
-  const m = Math.floor((sec % 3600) / 60);
-  const s = Math.floor(sec % 60);
-  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(
-    s
-  ).padStart(2, "0")}`;
-}
-
 export default function ResultsPanel({
   jobId,
   parts,
   originalName,
 }: ResultsPanelProps) {
   const totalSize = parts.reduce((acc, p) => acc + p.sizeBytes, 0);
+  const [isZipping, setIsZipping] = useState(false);
+
+  const handleDownloadZip = async () => {
+    setIsZipping(true);
+    try {
+      const zip = new JSZip();
+      
+      for (const part of parts) {
+        const response = await fetch(part.blobUrl);
+        const blob = await response.blob();
+        zip.file(part.filename, blob);
+      }
+      
+      const zipBlob = await zip.generateAsync({ type: "blob" });
+      saveAs(zipBlob, `${originalName.replace(/\.[^/.]+$/, "")}_splits.zip`);
+    } catch (e) {
+      console.error(e);
+      alert("Failed to generate ZIP");
+    } finally {
+      setIsZipping(false);
+    }
+  };
 
   return (
     <div className="w-full max-w-2xl mx-auto space-y-6">
@@ -62,27 +76,25 @@ export default function ResultsPanel({
               </span>
             </p>
           </div>
-          <a
-            href={`/api/download-zip?jobId=${jobId}`}
-            download
+          <button
+            onClick={handleDownloadZip}
+            disabled={isZipping}
             id="download-zip-btn"
-            className="
+            className={`
               flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm
-              bg-gradient-to-r from-violet-600 to-violet-500
-              hover:from-violet-500 hover:to-violet-400
+              ${isZipping ? 'bg-slate-600 cursor-not-allowed' : 'bg-gradient-to-r from-violet-600 to-violet-500 hover:from-violet-500 hover:to-violet-400'}
               text-white transition-all duration-200
               shadow-lg shadow-violet-900/30 hover:shadow-violet-900/50
               whitespace-nowrap active:scale-95
-            "
+            `}
           >
             <ArchiveBoxArrowDownIcon className="w-4 h-4" />
-            Download ZIP
-          </a>
+            {isZipping ? "Zipping..." : "Download ZIP"}
+          </button>
         </div>
 
         <p className="text-xs text-slate-500 bg-slate-800/60 rounded-lg px-3 py-2">
-          ⏱️ Files are automatically deleted after 1 hour. Download your parts
-          now.
+          ⏱️ Files are stored locally in your browser and will be lost if you refresh. Download your parts now.
         </p>
       </div>
 
@@ -105,20 +117,13 @@ export default function ResultsPanel({
                 {part.filename}
               </p>
               <div className="flex items-center gap-3 mt-1 text-xs text-slate-400">
-                <span>{formatDuration(part.durationSec)}</span>
-                <span className="text-slate-600">·</span>
                 <span>{formatBytes(part.sizeBytes)}</span>
-                <span className="text-slate-600">·</span>
-                <span className="font-mono">
-                  {formatTimecode(part.startSec)} →{" "}
-                  {formatTimecode(part.endSec)}
-                </span>
               </div>
             </div>
 
             {/* Download Button */}
             <a
-              href={`/api/download?jobId=${jobId}&part=${part.index}`}
+              href={part.blobUrl}
               download={part.filename}
               id={`download-part-${part.index}`}
               className="

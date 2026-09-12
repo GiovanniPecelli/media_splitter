@@ -1,12 +1,19 @@
 "use client";
 
-import { JobStatus, JobPart } from "@/lib/types";
 import { ScissorsIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 
+interface JobPartClient {
+  index: number;
+  filename: string;
+  blobUrl: string;
+  sizeBytes: number;
+  durationSec?: number;
+}
+
 interface ProgressPanelProps {
-  status: JobStatus | null;
+  status: string | null;
   progress: number;
-  parts: JobPart[];
+  parts: JobPartClient[];
   totalDurationSec: number;
   expectedParts: number;
 }
@@ -131,7 +138,7 @@ export default function ProgressPanel({
               </div>
               {isReady ? (
                 <p className="text-sm font-medium text-emerald-400">
-                  {formatDuration(part.durationSec)}
+                  {part.durationSec ? formatDuration(part.durationSec) : "Ready"}
                 </p>
               ) : (
                 <div className="h-4 bg-slate-700 rounded animate-pulse" />

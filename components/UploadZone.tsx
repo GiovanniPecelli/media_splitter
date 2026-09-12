@@ -277,29 +277,6 @@ export default function UploadZone({
         </p>
       </div>
 
-      {/* RAG Optimization Toggle */}
-      <div className="glass-card rounded-2xl p-5">
-        <label className="flex items-center justify-between cursor-pointer group">
-          <div className="space-y-1">
-            <span className="block text-sm font-medium text-slate-300 group-hover:text-white transition-colors">
-              Optimize for RAG (Force &lt; 200MB)
-            </span>
-            <span className="block text-xs text-slate-500">
-              Reduces quality if needed to ensure each part is under 200MB.
-            </span>
-          </div>
-          <div className="relative inline-flex items-center">
-            <input
-              type="checkbox"
-              checked={optimizeForRAG}
-              onChange={(e) => setOptimizeForRAG(e.target.checked)}
-              disabled={isUploading || disabled}
-              className="sr-only peer"
-            />
-            <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-violet-600"></div>
-          </div>
-        </label>
-      </div>
 
       {/* Split Preview */}
       {selectedFiles.length > 0 && Object.keys(fileDurations).length === selectedFiles.length && (

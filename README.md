@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎬 Media Splitter
 
-## Getting Started
+*Created as a personal tool by [giovannipecelli](https://github.com/giovannipecelli).*
 
-First, run the development server:
+[![Hosted on Vercel](https://img.shields.io/badge/Hosted_on-Vercel-black?logo=vercel)](https://media-splitter.vercel.app/)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Welcome to **Media Splitter**! This open-source web tool allows you to upload, trim, and split your videos into smaller clips easily and quickly, directly from your browser. **You can use the tool directly online without installing anything!**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Built with **Next.js**, **React**, and powered by **FFmpeg** for fast media processing, it guarantees accurate trimming and conversion without the need to download heavy software to your computer.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ✨ Features & Utility
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+* **Intuitive Interface**: A simple design (built with Tailwind CSS) to upload your videos and select how you want to split them.
+* **Fast Processing**: Uses FFmpeg (via `@ffmpeg-installer/ffmpeg`) to slice videos into fractions or based on custom time requirements.
+* **Bulk Download**: Receive all your split clips bundled together in a convenient `.zip` archive, ready to be used.
+* **Versatile**: Perfect for content creators who need to split long videos for TikTok, Instagram Reels, YouTube Shorts, or anyone managing large media files.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 How to Host Online (Vercel)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+You can easily host this project for free using **Vercel**, the official platform by the creators of Next.js. 
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Thanks to the `@ffmpeg-installer/ffmpeg` and `@ffprobe-installer/ffprobe` packages, the FFmpeg binaries are automatically downloaded and configured during the build phase.
 
-## Deploy on Vercel
+1. **Fork** this repository to your GitHub account.
+2. Go to [Vercel](https://vercel.com/) and log in (or create an account).
+3. Click on **Add New...** > **Project**.
+4. Import the Media Splitter repository from your GitHub.
+5. Leave the default settings (Framework Preset on *Next.js*) and click **Deploy**.
+6. Within a couple of minutes, your site will be live with a shareable link!
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 💻 Local Development
+
+If you prefer to run the tool on your own computer or want to modify the code, there are two main ways: using **Node.js** or using **Docker**.
+
+### Option 1: Standard Installation (Node.js)
+
+**Prerequisites:**
+* [Node.js](https://nodejs.org/) (version 18 or higher)
+* npm, yarn, pnpm, or bun
+* (Optional) FFmpeg installed on your system (although the installer packages should handle this).
+
+**Steps:**
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/giovannipecelli/media_splitter.git
+   cd media_splitter
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Option 2: Installation with Docker
+
+If you don't want to install Node.js or clutter your development environment, you can use Docker. This project already includes a `Dockerfile` and a `docker-compose.yml`.
+
+**Prerequisites:**
+* [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
+
+**Steps:**
+1. Open a terminal in the project folder.
+2. Run the following command:
+   ```bash
+   docker-compose up -d
+   ```
+3. Wait for the image to build and the container to start. Then, go to [http://localhost:3000](http://localhost:3000).
+
+---
+
+## 🛠️ Technologies Used
+
+- **Framework**: [Next.js](https://nextjs.org/) (App Router)
+- **UI/Styling**: [React](https://reactjs.org/), [Tailwind CSS](https://tailwindcss.com/)
+- **Media Processing**: `fluent-ffmpeg`, `@ffmpeg-installer/ffmpeg`, `@ffprobe-installer/ffprobe`
+- **File Management**: `formidable` (for uploads), `archiver` (for generating zip files).
+
+## 📄 License
+
+This project is open-source and available under the **MIT** license. Feel free to use it, modify it, and distribute it as you like!
